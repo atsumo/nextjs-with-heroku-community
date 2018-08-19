@@ -13,5 +13,5 @@ module.exports = {
   CATNAME_MAX_LENGTH: 15,
 
   // 通知種別
-  NOTIFICATION_TYPE: { Default: 0, Like: 1, Comment: 2, News: 3 }
+  NOTIFICATION_TYPE: { Default: 0, Like: 1, Comment: 2, News: 3, Mention: 4 }
 }
