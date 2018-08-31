@@ -48,17 +48,13 @@ class Signin extends React.Component {
   }
 
   render() {
-    const { code } = this.props
     const { email, password } = this.state
 
     return (
       <React.Fragment>
         <CenteredContainer height={430}>
           <section>
-            <SignInUpHeader
-              text="ログイン"
-              route={`${url.SIGNUP_EMAIL}/${code}`}
-            />
+            <SignInUpHeader text="ログイン" />
           </section>
 
           {/* <section className="oauth mt-5">
@@ -89,7 +85,6 @@ class Signin extends React.Component {
               <label>メールアドレス</label>
               <Input
                 type="email"
-                // style={inputStyle}
                 placeholder="メールアドレスを入力"
                 value={this.state.email}
                 onChange={this.handleChange('email')}
@@ -100,7 +95,6 @@ class Signin extends React.Component {
               <label>パスワード（半角英数字で8 ~ 40文字）</label>
               <Input
                 type="password"
-                // style={inputStyle}
                 placeholder="パスワードを入力"
                 value={this.state.password}
                 onChange={this.handleChange('password')}
@@ -149,6 +143,4 @@ class Signin extends React.Component {
   }
 }
 
-export default connect(state => ({
-  // post: state.site.post
-}))(Signin)
+export default connect()(Signin)

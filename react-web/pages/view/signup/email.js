@@ -61,13 +61,12 @@ class SignupEmail extends React.Component {
   }
 
   render() {
-    const { code } = this.props
     const { email, password } = this.state
     const passLength = password.length
     return (
       <CenteredContainer height={450}>
         <section>
-          <SignInUpHeader text="アカウント登録" />
+          <SignInUpHeader text="ログイン" />
         </section>
 
         <section className="mt-5">
@@ -79,6 +78,9 @@ class SignupEmail extends React.Component {
               value={email}
               onChange={this.handleChange('email')}
             />
+            <div className="regNote text-muted ml-2">
+              ※後でいつでも変更可能です。
+            </div>
           </div>
 
           <div className="mt-4 form-group">
@@ -102,23 +104,32 @@ class SignupEmail extends React.Component {
             color="#2b6db2"
             disabled={!email || password.length < Rule.PASS_MIN_LENGTH}
           >
-            アカウント登録
+            ログインする
           </ColorButton>
         </section>
 
         <section className="regNote mt-3 text-center">
-          上のアカウント登録ボタンを押すことにより、<br />
+          上のログインボタンを押すことにより、<br />
           <Link route={`/view/settings/membership_agreement`}>
             <a>利用規約</a>
           </Link>
-          に同意したことになります。
+          および
+          <Link route={`/view/settings/privacy_policy`}>
+            <a>Cookieの使用</a>
+          </Link>
+          を含む
+          <Link route={`/view/settings/privacy_policy`}>
+            <a>プライバシーポリシー</a>
+          </Link>
+          に<br />
+          同意したことになります。
         </section>
 
-        <section className="login mt-4 text-center">
+        {/* <section className="login mt-4 text-center">
           <Link route={`/view/signin?code=${code}`}>
             <a>アカウントをお持ちの方はログインへ</a>
           </Link>
-        </section>
+        </section> */}
 
         <style jsx>{`
           .regNote,
@@ -127,11 +138,11 @@ class SignupEmail extends React.Component {
             font-size: 12px;
           }
 
-          .login a {
-            font-size: 12px;
-            color: #909090;
-            text-decoration: underline;
-          }
+          // .login a {
+          //   font-size: 12px;
+          //   color: #909090;
+          //   text-decoration: underline;
+          // }
         `}</style>
       </CenteredContainer>
     )

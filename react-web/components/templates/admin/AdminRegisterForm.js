@@ -67,7 +67,7 @@ class AdminRegisterForm extends React.Component {
             <label>所属名*</label>
             <TallTextInput
               placeholder="企業名 あるいは ブランド名を入力"
-              style={{ ...mbStyle, width: 350 }}
+              style={{ ...mbStyle, width: '80%', maxWidth: 350 }}
               value={state.brandName}
               onChange={this.handleChange('brandName')}
               required
