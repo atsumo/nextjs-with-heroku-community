@@ -5,11 +5,14 @@ import { createAction } from 'redux-actions'
 import { User } from 'constants/ActionTypes'
 import Input from 'reactstrap/lib/Input'
 import FormFeedback from 'reactstrap/lib/FormFeedback'
+import * as EmailValidator from 'email-validator'
 import Role from '/../shared/constants/Role'
 import Rule from '/../shared/constants/Rule'
 import ColorButton from 'components/atoms/ColorButton'
 import CenteredContainer from 'components/molecules/CenteredContainer'
 import SignInUpHeader from 'components/molecules/SignInUpHeader'
+
+const EMAIL_FEEDBACK = '正しいメールアドレスを入力してください。'
 
 class SignupEmail extends React.Component {
   static async getInitialProps({ ctx }) {
@@ -62,7 +65,11 @@ class SignupEmail extends React.Component {
 
   render() {
     const { email, password } = this.state
+    const emailLength = email.length
     const passLength = password.length
+    const emailInvalid = emailLength > 0 && !EmailValidator.validate(email)
+    const passInvalid = passLength > 0 && passLength < Rule.PASS_MIN_LENGTH
+
     return (
       <CenteredContainer height={450}>
         <section>
@@ -77,7 +84,9 @@ class SignupEmail extends React.Component {
               placeholder="メールアドレスを入力"
               value={email}
               onChange={this.handleChange('email')}
+              invalid={emailInvalid}
             />
+            <FormFeedback>{EMAIL_FEEDBACK}</FormFeedback>
             <div className="regNote text-muted ml-2">
               ※後でいつでも変更可能です。
             </div>
@@ -90,7 +99,7 @@ class SignupEmail extends React.Component {
               placeholder={`パスワードを入力`}
               value={password}
               onChange={this.handleChange('password')}
-              invalid={passLength > 0 && passLength < Rule.PASS_MIN_LENGTH}
+              invalid={passInvalid}
             />
             <FormFeedback>
               {Rule.PASS_MIN_LENGTH}文字以上入力してください
@@ -102,7 +111,9 @@ class SignupEmail extends React.Component {
           <ColorButton
             className="w-75"
             color="#2b6db2"
-            disabled={!email || password.length < Rule.PASS_MIN_LENGTH}
+            disabled={
+              !emailLength || !passLength || emailInvalid || passInvalid
+            }
           >
             ログインする
           </ColorButton>

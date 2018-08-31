@@ -5,6 +5,7 @@ import { Link, Router } from 'routes'
 import { User } from 'constants/ActionTypes'
 import Input from 'reactstrap/lib/Input'
 import FormFeedback from 'reactstrap/lib/FormFeedback'
+import * as EmailValidator from 'email-validator'
 import * as utilFiles from 'utils/files'
 import ColorButton from 'components/atoms/ColorButton'
 import ProfileIconSelector from 'components/atoms/ProfileIconSelector'
@@ -13,6 +14,7 @@ import Color from 'constants/Color'
 import Rule from '/../shared/constants/Rule'
 
 const NULL_FEEDBACK = '1文字以上入力してください。'
+const EMAIL_FEEDBACK = '正しいメールアドレスを入力してください。'
 
 const inputStyle = {
   borderRadius: 10
@@ -67,7 +69,11 @@ class Account extends React.Component {
   render() {
     const props = this.props
     const { files, nickname, introduction, email, password } = this.state
+    const emailLength = email.length
     const passLength = password.length
+    const emailInvalid = emailLength > 0 && !EmailValidator.validate(email)
+    const passInvalid = passLength > 0 && passLength < Rule.PASS_MIN_LENGTH
+
     return (
       <React.Fragment>
         <BorderedTextHeader text="アカウント設定" />
@@ -115,9 +121,9 @@ class Account extends React.Component {
               style={inputStyle}
               value={email}
               onChange={this.handleChange('email')}
-              invalid={email === ''}
+              invalid={emailInvalid}
             />
-            <FormFeedback>{NULL_FEEDBACK}</FormFeedback>
+            <FormFeedback>{EMAIL_FEEDBACK}</FormFeedback>
           </section>
 
           <section className="mt-3">
@@ -127,7 +133,7 @@ class Account extends React.Component {
               style={inputStyle}
               value={password}
               onChange={this.handleChange('password')}
-              invalid={passLength > 0 && passLength < Rule.PASS_MIN_LENGTH}
+              invalid={passInvalid}
             />
             <FormFeedback>
               {Rule.PASS_MIN_LENGTH}文字以上入力してください
@@ -139,6 +145,9 @@ class Account extends React.Component {
               className="w-50"
               color={Color.MAIN_BLUE}
               onClick={this.onSubmit}
+              disabled={
+                !nickname.length || !emailLength || emailInvalid || passInvalid
+              }
             >
               保存する
             </ColorButton>
