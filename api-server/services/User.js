@@ -25,7 +25,14 @@ module.exports = class User {
 
     const filterdIds = _.compact(_.uniq(ids))
     const names = await models.User.findAll({
-      attributes: ['id', 'nickname', 'lastName', 'firstName', 'iconPath'],
+      attributes: [
+        'id',
+        'nickname',
+        'lastName',
+        'firstName',
+        'iconPath',
+        'accountName'
+      ],
       where: { id: filterdIds },
       raw: true
     })
@@ -33,11 +40,11 @@ module.exports = class User {
       // name
       let name = ''
       if (cur.nickname) name = cur.nickname
-      else name = `${cur.lastName} ${cur.firstName}`
+      else name = cur.accountName
 
       return {
         ...acc,
-        [cur.id]: { name, iconPath: cur.iconPath }
+        [cur.id]: { name, accountName: cur.accountName, iconPath: cur.iconPath }
       }
     }, {})
   }
@@ -94,6 +101,7 @@ module.exports = class User {
       email,
       password,
       fromServerFiles,
+      accountName,
       // 一般ユーザ
       nickname,
       introduction,
@@ -141,6 +149,9 @@ module.exports = class User {
       }
       if (roleId) {
         data = { ...data, roleId: +roleId }
+      }
+      if (accountName) {
+        data = { ...data, accountName }
       }
 
       // DB更新
@@ -201,7 +212,7 @@ module.exports = class User {
       }
 
       // 他社と連携する場合
-      if (options.partnerUserId) {
+      if (options.partnerUserId != null) {
         await PartnerService.create(user.id, options.partnerUserId, brandId, {
           transaction: trans
         })

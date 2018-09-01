@@ -4,13 +4,14 @@ module.exports = function(sequelize, DataTypes) {
   const User = sequelize.define('User', {
     email: DataTypes.STRING,
     passwordHash: DataTypes.STRING,
-    nickname: DataTypes.STRING,
+    accountName: DataTypes.STRING,
     iconPath: DataTypes.STRING,
     // 管理者が登録したときはそれ用のId定数を入れる
     roleId: DataTypes.INTEGER,
     lastLoginedAt: DataTypes.DATE,
 
     // 任意登録
+    nickname: DataTypes.STRING,
     introduction: DataTypes.TEXT,
     birthday: DataTypes.STRING,
     prefecture: DataTypes.INTEGER,

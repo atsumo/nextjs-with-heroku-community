@@ -6,23 +6,31 @@ const Message = reqlib('/constants/Message')
 const Role = reqlib('/../shared/constants/Role')
 const ConstInvitation = reqlib('/../shared/constants/Invitation')
 
+const E_ACCOUNTNAME_TAKEN = {
+  error:
+    'このユーザーIDはすでに利用されています。別のユーザーIDをご利用ください。'
+}
+
 /**
  * 特定ユーザ情報取得
  */
 exports.fetch = async (req, res, next) => {
+  // TODO accountNameでも引けるようにしておく
   const userId = req.params.id
   const user = await models.User.findById(userId, { raw: true })
-  const brand = await services.User.fetchBrand(userId)
+  const brand = await services.User.fetchBrand(user.id)
   let result = _.pick(user, [
     'id',
     'email',
     'nickname',
+    'accountName',
     'introduction',
     'firstName',
     'lastName',
     'iconPath',
     'roleId'
   ])
+  console.log('[fetch]user', user)
   result = { ...result, brand }
   res.json(result)
 }
@@ -33,13 +41,13 @@ exports.fetch = async (req, res, next) => {
 exports.profile = async (req, res, next) => {
   console.log('[profilesave]body', req.body)
   console.log('[profilesave]file', req.file)
-  const { nickname, lastName, firstName } = req.body
+  const { accountName } = req.body
   const userId = req.body.userId || req.user.id
   const meId = req.user.id
 
-  // ニックネーム or 本名は必須
-  if (!nickname && (!firstName || !lastName)) {
-    return res.status(422).json(Message.E_NULL_REQUIRED_FIELD)
+  // accountNameが必須
+  if (!accountName) {
+    return res.status(424).json(Message.E_NULL_REQUIRED_FIELD)
   }
 
   // もし他人のページを変更しようとする場合はAdmin権限チェック
@@ -48,6 +56,15 @@ exports.profile = async (req, res, next) => {
   }
 
   try {
+    // もうすでにaccountNameを使っているユーザーがいたらエラー
+    const existingUser = await models.User.findOne({
+      where: { accountName },
+      raw: true
+    })
+    if (existingUser) {
+      return res.status(422).json(E_ACCOUNTNAME_TAKEN)
+    }
+
     await services.User.updateProfile(userId, req.file, req.body)
     res.json(true)
   } catch (e) {

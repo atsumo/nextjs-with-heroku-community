@@ -136,6 +136,7 @@ function* saveUserProfile({ payload }) {
     email,
     password,
     files,
+    accountName,
     // 一般ユーザ
     nickname,
     introduction,
@@ -156,6 +157,7 @@ function* saveUserProfile({ payload }) {
   lastName && formData.append('lastName', lastName)
   firstName && formData.append('firstName', firstName)
   roleId && formData.append('roleId', roleId)
+  accountName && formData.append('accountName', accountName)
 
   try {
     const res = yield call(API.post, '/user/profile', formData, jwtToken)

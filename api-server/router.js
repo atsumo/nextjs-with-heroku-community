@@ -90,6 +90,7 @@ module.exports = function(app) {
       'id',
       'email',
       'nickname',
+      'accountName',
       'introduction',
       'firstName',
       'lastName',

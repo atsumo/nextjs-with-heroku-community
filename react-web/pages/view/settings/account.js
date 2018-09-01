@@ -73,6 +73,7 @@ class Account extends React.Component {
     const passLength = password.length
     const emailInvalid = emailLength > 0 && !EmailValidator.validate(email)
     const passInvalid = passLength > 0 && passLength < Rule.PASS_MIN_LENGTH
+    const { accountName } = props.user
 
     return (
       <React.Fragment>
@@ -100,6 +101,16 @@ class Account extends React.Component {
               invalid={nickname === ''}
             />
             <FormFeedback>{NULL_FEEDBACK}</FormFeedback>
+          </section>
+
+          <section className="mt-0">
+            <label className="mb-1">ユーザID</label>
+            <Input
+              type="text"
+              style={inputStyle}
+              value={accountName}
+              disabled="disabled"
+            />
           </section>
 
           <section className="mt-3">
@@ -136,7 +147,8 @@ class Account extends React.Component {
               invalid={passInvalid}
             />
             <FormFeedback>
-              {Rule.PASS_MIN_LENGTH}文字以上入力してください
+              {Rule.PASS_MIN_LENGTH}
+              文字以上入力してください
             </FormFeedback>
           </section>
 

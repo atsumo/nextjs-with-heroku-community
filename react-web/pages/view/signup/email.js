@@ -49,7 +49,7 @@ class SignupEmail extends React.Component {
       const to =
         roleId >= Role.User.ADMIN_GUEST
           ? `/admin/settings/account/edit`
-          : `/view/signup/complete`
+          : `/view/signup/profile`
       Router.pushRoute(to)
     }
     this.props.dispatch(

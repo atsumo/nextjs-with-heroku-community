@@ -13,7 +13,7 @@ import Rule from '/../shared/constants/Rule'
 class SignupProfile extends React.Component {
   state = {
     files: [],
-    nickname: ''
+    accountName: ''
   }
 
   handleChange = name => event => {
@@ -30,19 +30,22 @@ class SignupProfile extends React.Component {
   }
 
   async onSubmit(e) {
-    const { nickname, files } = this.state
+    // TODO: validation
+    const { accountName, files } = this.state
     const successCb = async res => {
       Router.pushRoute(`/view/home`)
     }
     this.props.dispatch(
       createAction(User.SAVE_PROFILE_REQUEST)({
         successCb,
-        data: { nickname, files }
+        data: { accountName, files }
       })
     )
   }
 
   render() {
+    const { accountName } = this.state
+    const isValidated = Rule.ACCOUNTNAME_REGEX.exec(accountName)
     return (
       <CenteredContainer height={400}>
         <section className="mb-3">
@@ -61,25 +64,28 @@ class SignupProfile extends React.Component {
           <div className="form-group">
             <Input
               type="text"
-              placeholder="ユーザ名"
-              value={this.state.nickname}
-              maxLength={Rule.NICKNAME_MAX_LENGTH}
-              onChange={this.handleChange('nickname')}
+              placeholder="ユーザID"
+              value={accountName}
+              maxLength={Rule.ACCOUNTNAME_MAX_LENGTH}
+              onChange={this.handleChange('accountName')}
+              invalid={!isValidated}
             />
           </div>
         </section>
 
         <section className="regNote my-3 text-center">
-          名字や名前、ニックネームなど、<br />
-          コミュニティ内で呼ばれたいユーザ名にしましょう。<br />
-          * 後でいつでも変更可能です
+          コミュニティー内のあなたの固有のIDです。
+          <br />
+          投稿やコメント時に「@ユーザーID」とすることで、
+          <br />
+          「メンション=読んでほしい人への通知」を行うことができます。
         </section>
 
         <section className="text-center" onClick={this.onSubmit.bind(this)}>
           <ColorButton
             className="w-75 mt-4"
             color="#2b6db2"
-            disabled={!this.state.nickname.length}
+            disabled={!accountName.length || !isValidated}
           >
             続ける
           </ColorButton>

@@ -18,6 +18,8 @@ module.exports = {
   TITLE_MAX_LENGTH: 50,
   POST_MAX_LENGTH: 1500,
   OPTION_MAX_LENGTH: 14,
+  ACCOUNTNAME_MAX_LENGTH: 15,
+  ACCOUNTNAME_REGEX: /[a-zA-Z1-9]+/g,
 
   // 通知種別
   NOTIFICATION_TYPE: { Default: 0, Like: 1, Comment: 2, News: 3, Mention: 4 },
